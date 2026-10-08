@@ -1,0 +1,3922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="theme-color" content="#07152f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>Testmony — Connect beyond</title>
+
+    <style>
+        /* =========================================================
+           TESTMONY V0.0.1
+           CONNECT BEYOND
+           Founder: MSAFIRI WILLIAM MUNGA
+           Company: ZetroLink Technology Limited
+           ========================================================= */
+
+        :root {
+            --bg: #07152f;
+            --bg2: #0b1f43;
+            --card: rgba(18, 40, 80, 0.88);
+            --card2: rgba(25, 52, 98, 0.88);
+            --text: #ffffff;
+            --muted: #9eb0cf;
+            --primary: #2f80ff;
+            --primary2: #5b5df7;
+            --border: rgba(255,255,255,.09);
+            --danger: #ff5571;
+            --success: #39d98a;
+            --shadow: 0 15px 40px rgba(0,0,0,.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           SPLASH
+           ========================================================= */
+
+        #splash {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 40%,
+                    rgba(56,125,255,.45),
+                    transparent 30%),
+                linear-gradient(145deg,
+                    #03102b,
+                    #0a2a62,
+                    #07152f);
+            transition: opacity .8s ease, visibility .8s ease;
+        }
+
+        #splash.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(43,118,255,.12);
+            filter: blur(80px);
+            animation: blueGlow 5s ease-in-out infinite;
+        }
+
+        @keyframes blueGlow {
+            0%,100% {
+                transform: scale(.85);
+                opacity: .5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .splash-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .testmony-logo {
+            width: 125px;
+            height: 125px;
+            margin: 0 auto 28px;
+            border-radius: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            background:
+                linear-gradient(145deg,
+                    #2f80ff,
+                    #5965ff,
+                    #263caa);
+
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,.12),
+                0 20px 70px rgba(35,111,255,.45);
+
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .testmony-logo::before {
+            content: "";
+            position: absolute;
+            inset: 9px;
+            border: 2px solid rgba(255,255,255,.25);
+            border-radius: 30px;
+        }
+
+        .logo-letter {
+            position: relative;
+            z-index: 2;
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -6px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            14% {
+                transform: scale(1.08);
+            }
+
+            28% {
+                transform: scale(1);
+            }
+
+            42% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        .splash-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+        }
+
+        .splash-subtitle {
+            margin-top: 8px;
+            color: rgba(255,255,255,.72);
+            font-size: 15px;
+            letter-spacing: 2px;
+        }
+
+        .splash-version {
+            margin-top: 28px;
+            font-size: 11px;
+            color: rgba(255,255,255,.4);
+        }
+
+        /* =========================================================
+           APP
+           ========================================================= */
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+            background:
+                radial-gradient(circle at top right,
+                    rgba(52,100,255,.08),
+                    transparent 35%),
+                var(--bg);
+        }
+
+        #app.visible {
+            display: block;
+        }
+
+        .screen {
+            display: none;
+            position: absolute;
+            inset: 0;
+            padding-bottom: 76px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* =========================================================
+           AUTH
+           ========================================================= */
+
+        #authScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:
+                radial-gradient(circle at top,
+                    rgba(45,115,255,.3),
+                    transparent 45%),
+                var(--bg);
+        }
+
+        #authScreen.active {
+            display: flex;
+        }
+
+        .auth-card {
+            width: min(430px, 100%);
+            padding: 30px 24px;
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            background: rgba(10,28,58,.92);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+        }
+
+        .auth-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg,#2f80ff,#625df5);
+            font-size: 38px;
+            font-weight: 900;
+        }
+
+        .auth-title {
+            text-align: center;
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            margin: 7px 0 25px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 13px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #c5d3e9;
+            font-size: 13px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px 15px;
+            color: white;
+            outline: none;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255,255,255,.055);
+        }
+
+        .input:focus {
+            border-color: rgba(47,128,255,.8);
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(135deg,var(--primary),var(--primary2));
+            box-shadow: 0 10px 25px rgba(47,128,255,.25);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .auth-switch button {
+            color: #69a5ff;
+            background: transparent;
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 15px 16px 12px;
+            background: rgba(7,21,47,.9);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,.04);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg,#2f80ff,#625df5);
+            font-weight: 900;
+            font-size: 21px;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            color: white;
+            background: rgba(255,255,255,.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* =========================================================
+           SEARCH
+           ========================================================= */
+
+        .search-box {
+            margin-top: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--border);
+        }
+
+        .search-box span {
+            color: var(--muted);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: white;
+        }
+
+        /* =========================================================
+           FEED TABS
+           ========================================================= */
+
+        .feed-tabs {
+            display: flex;
+            gap: 25px;
+            padding: 15px 16px 5px;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .feed-tab {
+            padding-bottom: 10px;
+            color: var(--muted);
+            background: transparent;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .feed-tab.active {
+            color: white;
+        }
+
+        .feed-tab.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px;
+            border-radius: 5px;
+            background: var(--primary);
+        }
+
+        /* =========================================================
+           STORIES
+           ========================================================= */
+
+        .stories {
+            display: flex;
+            gap: 13px;
+            padding: 17px 16px;
+            overflow-x: auto;
+        }
+
+        .stories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story {
+            flex: 0 0 64px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .story-avatar {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 6px;
+            padding: 2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg,#2f80ff,#9d5cff);
+        }
+
+        .story-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #122951;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .my-story .story-avatar {
+            background: rgba(255,255,255,.12);
+        }
+
+        /* =========================================================
+           CREATE POST
+           ========================================================= */
+
+        .create-post {
+            margin: 0 16px 15px;
+            padding: 13px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .create-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-avatar {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,#2f80ff,#655df7);
+            font-weight: 800;
+        }
+
+        .create-input {
+            flex: 1;
+            padding: 12px 14px;
+            border-radius: 13px;
+            color: var(--muted);
+            background: rgba(255,255,255,.05);
+        }
+
+        .create-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .create-action {
+            color: #a9bada;
+            background: transparent;
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           POSTS
+           ========================================================= */
+
+        .post {
+            margin: 0 16px 15px;
+            padding: 15px;
+            border-radius: 19px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-user {
+            flex: 1;
+        }
+
+        .post-name {
+            font-weight: 750;
+            font-size: 14px;
+        }
+
+        .post-time {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .post-menu {
+            color: var(--muted);
+            background: transparent;
+            font-size: 19px;
+        }
+
+        .post-text {
+            margin-top: 13px;
+            color: #e7edf7;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .post-media {
+            width: 100%;
+            min-height: 180px;
+            margin-top: 13px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(135deg,
+                    rgba(47,128,255,.3),
+                    rgba(95,80,245,.3));
+            color: rgba(255,255,255,.65);
+        }
+
+        .post-actions {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 5px;
+            margin-top: 13px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-action {
+            padding: 8px 3px;
+            border-radius: 10px;
+            color: var(--muted);
+            background: transparent;
+            font-size: 12px;
+        }
+
+        .post-action:hover {
+            background: rgba(255,255,255,.05);
+        }
+
+        /* =========================================================
+           DISCOVERY
+           ========================================================= */
+
+        .page-title {
+            padding: 20px 16px 5px;
+            font-size: 28px;
+            font-weight: 850;
+        }
+
+        .page-subtitle {
+            padding: 0 16px 18px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .discovery-grid {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 12px;
+            padding: 10px 16px 20px;
+        }
+
+        .discovery-card {
+            min-height: 145px;
+            padding: 17px;
+            border-radius: 20px;
+            text-align: left;
+            color: white;
+            border: 1px solid var(--border);
+            background:
+                linear-gradient(145deg,
+                    rgba(26,57,108,.95),
+                    rgba(14,35,72,.95));
+            transition: transform .15s ease;
+        }
+
+        .discovery-card:active {
+            transform: scale(.97);
+        }
+
+        .discovery-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 18px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(47,128,255,.15);
+            font-size: 24px;
+        }
+
+        .discovery-title {
+            font-size: 15px;
+            font-weight: 750;
+        }
+
+        .discovery-description {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* =========================================================
+           SUB PAGE
+           ========================================================= */
+
+        .sub-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(7,21,47,.94);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(255,255,255,.06);
+            color: white;
+            font-size: 20px;
+        }
+
+        .sub-title {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .option-list {
+            padding: 15px 16px;
+        }
+
+        .option-card {
+            width: 100%;
+            margin-bottom: 11px;
+            padding: 17px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: var(--card);
+        }
+
+        .option-icon {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(47,128,255,.13);
+            font-size: 21px;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-title {
+            font-weight: 750;
+        }
+
+        .option-description {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           CHATS
+           ========================================================= */
+
+        .chat-list {
+            padding: 5px 10px 20px;
+        }
+
+        .chat-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 7px;
+            color: white;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,.045);
+            text-align: left;
+        }
+
+        .chat-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,#287df5,#685cf5);
+            font-weight: 800;
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-name {
+            font-weight: 750;
+        }
+
+        .chat-message {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-time {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* =========================================================
+           PROFILE
+           ========================================================= */
+
+        .profile-cover {
+            height: 160px;
+            background:
+                radial-gradient(circle at 30% 30%,
+                    rgba(255,255,255,.18),
+                    transparent 20%),
+                linear-gradient(135deg,#0d55c7,#5636bb,#152c66);
+        }
+
+        .profile-main {
+            padding: 0 16px 25px;
+        }
+
+        .profile-avatar {
+            width: 94px;
+            height: 94px;
+            margin-top: -47px;
+            border: 5px solid var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,#2f80ff,#635cf5);
+            font-size: 36px;
+            font-weight: 850;
+        }
+
+        .profile-name {
+            margin-top: 12px;
+            font-size: 23px;
+            font-weight: 850;
+        }
+
+        .profile-username {
+            color: var(--muted);
+            margin-top: 2px;
+            font-size: 13px;
+        }
+
+        .profile-bio {
+            margin-top: 12px;
+            color: #d6e0f1;
+            line-height: 1.5;
+            font-size: 13px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            margin-top: 20px;
+            padding: 15px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .edit-profile {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 13px;
+            color: white;
+            background: rgba(255,255,255,.07);
+            border: 1px solid var(--border);
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           AI CHAT
+           ========================================================= */
+
+        .ai-chat {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 130px);
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 20px 16px;
+        }
+
+        .ai-message {
+            max-width: 85%;
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ai-message.bot {
+            background: var(--card);
+            border: 1px solid var(--border);
+        }
+
+        .ai-message.user {
+            margin-left: auto;
+            background: linear-gradient(135deg,#277df3,#5c5df3);
+        }
+
+        .ai-input {
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid var(--border);
+            background: rgba(7,21,47,.95);
+        }
+
+        .ai-input input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            outline: none;
+            color: white;
+            background: rgba(255,255,255,.06);
+        }
+
+        .send-btn {
+            width: 48px;
+            border-radius: 13px;
+            color: white;
+            background: var(--primary);
+        }
+
+        /* =========================================================
+           VIDEOS
+           ========================================================= */
+
+        .video-card {
+            height: calc(100vh - 76px);
+            min-height: 550px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(0,0,0,.85),
+                    transparent 55%
+                ),
+                linear-gradient(135deg,#142b5d,#173d81,#381c6d);
+        }
+
+        .video-info {
+            max-width: 75%;
+        }
+
+        .video-user {
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .video-caption {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .video-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .video-action {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            background: rgba(0,0,0,.35);
+            backdrop-filter: blur(8px);
+        }
+
+        /* =========================================================
+           SETTINGS
+           ========================================================= */
+
+        .settings-list {
+            padding: 15px 16px;
+        }
+
+        .setting-item {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: white;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .setting-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(47,128,255,.12);
+        }
+
+        .setting-text {
+            flex: 1;
+        }
+
+        .setting-description {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           BOTTOM NAV
+           ========================================================= */
+
+        .bottom-nav {
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 72px;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            padding: 6px 8px max(6px, env(safe-area-inset-bottom));
+            background: rgba(6,19,42,.96);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,.08);
+        }
+
+        .nav-btn {
+            position: relative;
+            color: #8194b5;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            border-radius: 13px;
+        }
+
+        .nav-icon {
+            font-size: 21px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .nav-btn.active {
+            color: white;
+        }
+
+        .nav-btn.active::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            width: 26px;
+            height: 3px;
+            border-radius: 5px;
+            background: var(--primary);
+        }
+
+        /* =========================================================
+           FLOATING CREATE
+           ========================================================= */
+
+        .floating-create {
+            position: fixed;
+            z-index: 80;
+            right: 17px;
+            bottom: 88px;
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            color: white;
+            font-size: 25px;
+            background: linear-gradient(135deg,#2f80ff,#665cf4);
+            box-shadow: 0 12px 35px rgba(47,128,255,.35);
+        }
+
+        /* =========================================================
+           MODAL
+           ========================================================= */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            display: none;
+            align-items: flex-end;
+            background: rgba(0,0,0,.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 22px 18px 30px;
+            border-radius: 25px 25px 0 0;
+            background: #0b2044;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal-handle {
+            width: 45px;
+            height: 4px;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.2);
+        }
+
+        .modal-title {
+            font-size: 21px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+
+        #toast {
+            position: fixed;
+            z-index: 99999;
+            left: 50%;
+            bottom: 90px;
+            transform: translate(-50%,20px);
+            opacity: 0;
+            pointer-events: none;
+            padding: 12px 17px;
+            border-radius: 13px;
+            background: rgba(0,0,0,.85);
+            color: white;
+            font-size: 12px;
+            transition: .25s ease;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translate(-50%,0);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (min-width: 700px) {
+
+            .screen {
+                max-width: 760px;
+                margin: auto;
+                left: 50%;
+                right: auto;
+                width: 100%;
+                transform: translateX(-50%);
+            }
+
+            .bottom-nav {
+                left: 50%;
+                right: auto;
+                width: 760px;
+                transform: translateX(-50%);
+            }
+
+            .floating-create {
+                right: calc(50% - 350px);
+            }
+
+            .discovery-grid {
+                grid-template-columns: repeat(4,1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     SPLASH SCREEN
+     ============================================================ -->
+
+<div id="splash">
+
+    <div class="splash-glow"></div>
+
+    <div class="splash-content">
+
+        <div class="testmony-logo">
+            <div class="logo-letter">T</div>
+        </div>
+
+        <div class="splash-title">
+            Testmony
+        </div>
+
+        <div class="splash-subtitle">
+            Connect beyond
+        </div>
+
+        <div class="splash-version">
+            Testmony V0.0.1
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ============================================================
+     AUTH SCREEN
+     ============================================================ -->
+
+<div id="authScreen">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">T</div>
+
+        <div class="auth-title" id="authTitle">
+            Welcome to Testmony
+        </div>
+
+        <div class="auth-subtitle" id="authSubtitle">
+            Connect beyond
+        </div>
+
+        <!-- LOGIN -->
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>Email or Username</label>
+                <input
+                    class="input"
+                    id="loginIdentifier"
+                    type="text"
+                    placeholder="Enter email or username"
+                    required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    class="input"
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Enter password"
+                    required>
+            </div>
+
+            <button class="primary-btn" type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <!-- REGISTER -->
+
+        <form id="registerForm" style="display:none;">
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input
+                    class="input"
+                    id="registerName"
+                    type="text"
+                    placeholder="Your full name"
+                    required>
+            </div>
+
+            <div class="input-group">
+                <label>Username</label>
+                <input
+                    class="input"
+                    id="registerUsername"
+                    type="text"
+                    placeholder="@username"
+                    required>
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input
+                    class="input"
+                    id="registerEmail"
+                    type="email"
+                    placeholder="you@example.com"
+                    required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    class="input"
+                    id="registerPassword"
+                    type="password"
+                    placeholder="Create password"
+                    required>
+            </div>
+
+            <button class="primary-btn" type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="auth-switch">
+
+            <span id="authSwitchText">
+                Don't have an account?
+            </span>
+
+            <button id="authSwitchBtn">
+                Create Account
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ============================================================
+     MAIN APP
+     ============================================================ -->
+
+<div id="app">
+
+    <!-- ========================================================
+         HOME
+         ======================================================== -->
+
+    <section
+        class="screen active"
+        id="homeScreen">
+
+        <header class="top-header">
+
+            <div class="header-row">
+
+                <div class="brand">
+
+                    <div class="brand-logo">
+                        T
+                    </div>
+
+                    <div class="brand-name">
+                        Testmony
+                    </div>
+
+                </div>
+
+                <div class="header-actions">
+
+                    <button
+                        class="icon-btn"
+                        onclick="openNotifications()">
+                        🔔
+                    </button>
+
+                    <button
+                        class="icon-btn"
+                        onclick="openManual()">
+                        ⋮
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    id="globalSearch"
+                    type="search"
+                    placeholder="Search people, posts and more...">
+
+            </div>
+
+        </header>
+
+
+        <div class="feed-tabs">
+
+            <button
+                class="feed-tab active"
+                onclick="switchFeedTab(this)">
+                For You
+            </button>
+
+            <button
+                class="feed-tab"
+                onclick="switchFeedTab(this)">
+                Following
+            </button>
+
+        </div>
+
+
+        <!-- STORIES -->
+
+        <div class="stories">
+
+            <div class="story my-story"
+                 onclick="createStory()">
+
+                <div class="story-avatar">
+
+                    <div class="story-avatar-inner">
+                        +
+                    </div>
+
+                </div>
+
+                My Story
+
+            </div>
+
+            <div class="story">
+
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        A
+                    </div>
+                </div>
+
+                Amani
+
+            </div>
+
+            <div class="story">
+
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        J
+                    </div>
+                </div>
+
+                John
+
+            </div>
+
+            <div class="story">
+
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        S
+                    </div>
+                </div>
+
+                Sarah
+
+            </div>
+
+            <div class="story">
+
+                <div class="story-avatar">
+                    <div class="story-avatar-inner">
+                        D
+                    </div>
+                </div>
+
+                Daniel
+
+            </div>
+
+        </div>
+
+
+        <!-- CREATE POST -->
+
+        <div
+            class="create-post"
+            onclick="openCreatePost()">
+
+            <div class="create-row">
+
+                <div class="mini-avatar">
+                    T
+                </div>
+
+                <div class="create-input">
+                    What's happening?
+                </div>
+
+            </div>
+
+            <div class="create-actions">
+
+                <button class="create-action">
+                    🖼️ Photo
+                </button>
+
+                <button class="create-action">
+                    🎥 Video
+                </button>
+
+                <button class="create-action">
+                    📄 File
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- POST 1 -->
+
+        <article class="post">
+
+            <div class="post-header">
+
+                <div class="mini-avatar">
+                    M
+                </div>
+
+                <div class="post-user">
+
+                    <div class="post-name">
+                        MSAFIRI WILLIAM MUNGA
+                    </div>
+
+                    <div class="post-time">
+                        Just now · 🌍
+                    </div>
+
+                </div>
+
+                <button class="post-menu">
+                    ⋮
+                </button>
+
+            </div>
+
+            <div class="post-text">
+                Welcome to Testmony.
+
+                A new social platform designed to connect people,
+                ideas, education, creativity and opportunities.
+
+                Connect beyond.
+            </div>
+
+            <div class="post-media">
+                TESTMONY
+            </div>
+
+            <div class="post-actions">
+
+                <button
+                    class="post-action"
+                    onclick="toggleLike(this)">
+                    ♡ Like
+                </button>
+
+                <button
+                    class="post-action"
+                    onclick="openComments()">
+                    💬 Comment
+                </button>
+
+                <button
+                    class="post-action"
+                    onclick="toast('Post saved')">
+                    🔖 Save
+                </button>
+
+                <button
+                    class="post-action"
+                    onclick="toast('Share options opened')">
+                    ↗ Share
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- POST 2 -->
+
+        <article class="post">
+
+            <div class="post-header">
+
+                <div class="mini-avatar">
+                    A
+                </div>
+
+                <div class="post-user">
+
+                    <div class="post-name">
+                        Amani Technology
+                    </div>
+
+                    <div class="post-time">
+                        2h · 🌍
+                    </div>
+
+                </div>
+
+                <button class="post-menu">
+                    ⋮
+                </button>
+
+            </div>
+
+            <div class="post-text">
+                Technology connects the world when people use
+                it to create opportunities for others.
+            </div>
+
+            <div class="post-actions">
+
+                <button
+                    class="post-action"
+                    onclick="toggleLike(this)">
+                    ♡ Like
+                </button>
+
+                <button
+                    class="post-action">
+                    💬 Comment
+                </button>
+
+                <button
+                    class="post-action">
+                    🔖 Save
+                </button>
+
+                <button
+                    class="post-action">
+                    ↗ Share
+                </button>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ========================================================
+         DISCOVERY
+         ======================================================== -->
+
+    <section
+        class="screen"
+        id="discoveryScreen">
+
+        <div class="page-title">
+            Discovery
+        </div>
+
+        <div class="page-subtitle">
+            Explore everything inside Testmony.
+        </div>
+
+        <div class="discovery-grid">
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('ai')">
+
+                <div class="discovery-icon">
+                    📖
+                </div>
+
+                <div class="discovery-title">
+                    AI Council
+                </div>
+
+                <div class="discovery-description">
+                    Education, Health, Agriculture and Research AI
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('studio')">
+
+                <div class="discovery-icon">
+                    🖼️
+                </div>
+
+                <div class="discovery-title">
+                    Creative Studio
+                </div>
+
+                <div class="discovery-description">
+                    Create images, videos and documents
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('market')">
+
+                <div class="discovery-icon">
+                    🛍️
+                </div>
+
+                <div class="discovery-title">
+                    Market
+                </div>
+
+                <div class="discovery-description">
+                    Products, services and digital products
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('map')">
+
+                <div class="discovery-icon">
+                    🌍
+                </div>
+
+                <div class="discovery-title">
+                    World Map
+                </div>
+
+                <div class="discovery-description">
+                    Explore people and content around the world
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('channels')">
+
+                <div class="discovery-icon">
+                    📺
+                </div>
+
+                <div class="discovery-title">
+                    Channels
+                </div>
+
+                <div class="discovery-description">
+                    News and media channels
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('communities')">
+
+                <div class="discovery-icon">
+                    👥
+                </div>
+
+                <div class="discovery-title">
+                    Communities
+                </div>
+
+                <div class="discovery-description">
+                    Join communities and discussions
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('videos')">
+
+                <div class="discovery-icon">
+                    ▶️
+                </div>
+
+                <div class="discovery-title">
+                    Videos
+                </div>
+
+                <div class="discovery-description">
+                    Short vertical video feed
+                </div>
+
+            </button>
+
+
+            <button
+                class="discovery-card"
+                onclick="openDiscovery('settings')">
+
+                <div class="discovery-icon">
+                    ⚙️
+                </div>
+
+                <div class="discovery-title">
+                    Settings
+                </div>
+
+                <div class="discovery-description">
+                    Preferences and app settings
+                </div>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         CHATS
+         ======================================================== -->
+
+    <section
+        class="screen"
+        id="chatsScreen">
+
+        <header class="top-header">
+
+            <div class="header-row">
+
+                <div class="brand-name">
+                    Chats
+                </div>
+
+                <button
+                    class="icon-btn"
+                    onclick="searchPeople()">
+                    🔍
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="chat-list">
+
+            <button
+                class="chat-item"
+                onclick="openChat('Amani')">
+
+                <div class="chat-avatar">
+                    A
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        Amani
+                    </div>
+
+                    <div class="chat-message">
+                        See you later 👋
+                    </div>
+
+                </div>
+
+                <div class="chat-time">
+                    10:42
+                </div>
+
+            </button>
+
+
+            <button
+                class="chat-item"
+                onclick="openChat('John')">
+
+                <div class="chat-avatar">
+                    J
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        John
+                    </div>
+
+                    <div class="chat-message">
+                        The project looks great.
+                    </div>
+
+                </div>
+
+                <div class="chat-time">
+                    09:15
+                </div>
+
+            </button>
+
+
+            <button
+                class="chat-item"
+                onclick="openChat('Sarah')">
+
+                <div class="chat-avatar">
+                    S
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        Sarah
+                    </div>
+
+                    <div class="chat-message">
+                        Voice message
+                    </div>
+
+                </div>
+
+                <div class="chat-time">
+                    Yesterday
+                </div>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         PROFILE
+         ======================================================== -->
+
+    <section
+        class="screen"
+        id="profileScreen">
+
+        <div class="profile-cover"></div>
+
+        <div class="profile-main">
+
+            <div class="profile-avatar">
+                M
+            </div>
+
+            <div class="profile-name">
+                MSAFIRI WILLIAM MUNGA
+            </div>
+
+            <div class="profile-username">
+                @msafiri
+            </div>
+
+            <div class="profile-bio">
+                Founder of Testmony.
+                Building technology, creativity and opportunities
+                that connect people beyond.
+            </div>
+
+            <div class="profile-stats">
+
+                <div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Posts</div>
+                </div>
+
+                <div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+
+                <div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Following</div>
+                </div>
+
+            </div>
+
+            <button
+                class="edit-profile"
+                onclick="toast('Edit Profile coming soon')">
+                Edit Profile
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         SUB PAGE
+         ======================================================== -->
+
+    <section
+        class="screen"
+        id="subScreen">
+
+        <div class="sub-header">
+
+            <button
+                class="back-btn"
+                onclick="closeSubPage()">
+                ←
+            </button>
+
+            <div
+                class="sub-title"
+                id="subPageTitle">
+                Discovery
+            </div>
+
+        </div>
+
+        <div
+            class="option-list"
+            id="subPageContent">
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         CHAT CONVERSATION
+         ======================================================== -->
+
+    <section
+        class="screen"
+        id="conversationScreen">
+
+        <div class="sub-header">
+
+            <button
+                class="back-btn"
+                onclick="showScreen('chatsScreen')">
+                ←
+            </button>
+
+            <div class="chat-avatar"
+                 style="width:38px;height:38px;">
+                A
+            </div>
+
+            <div style="flex:1">
+
+                <div
+                    class="sub-title"
+                    style="font-size:16px;">
+                    Amani
+                </div>
+
+                <div
+                    style="font-size:10px;color:#8296b8;">
+                    online
+                </div>
+
+            </div>
+
+            <button
+                class="icon-btn"
+                onclick="toast('Voice call')">
+                📞
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="toast('Video call')">
+                📹
+            </button>
+
+        </div>
+
+
+        <div
+            id="chatMessages"
+            style="padding:20px 16px 90px;">
+
+            <div class="ai-message bot">
+                Hello! Welcome to Testmony 👋
+            </div>
+
+            <div class="ai-message user">
+                Hi!
+            </div>
+
+        </div>
+
+        <div
+            style="
+                position:fixed;
+                bottom:72px;
+                left:0;
+                right:0;
+                padding:10px;
+                background:#07152f;
+                display:flex;
+                gap:8px;
+                border-top:1px solid var(--border);
+            ">
+
+            <button
+                class="icon-btn"
+                onclick="toast('Attachment options')">
+                +
+            </button>
+
+            <input
+                id="chatInput"
+                class="input"
+                placeholder="Message..."
+                style="flex:1;">
+
+            <button
+                class="send-btn"
+                onclick="sendChatMessage()">
+                ➤
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         BOTTOM NAV
+         ======================================================== -->
+
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-btn active"
+            data-screen="homeScreen"
+            onclick="navigate('homeScreen',this)">
+
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-screen="discoveryScreen"
+            onclick="navigate('discoveryScreen',this)">
+
+            <span class="nav-icon">🧭</span>
+            <span class="nav-label">Discovery</span>
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-screen="chatsScreen"
+            onclick="navigate('chatsScreen',this)">
+
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Chats</span>
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-screen="profileScreen"
+            onclick="navigate('profileScreen',this)">
+
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Profile</span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- FLOATING CREATE -->
+
+    <button
+        class="floating-create"
+        onclick="openCreatePost()">
+        +
+    </button>
+
+</div>
+
+
+<!-- ============================================================
+     MODAL
+     ============================================================ -->
+
+<div
+    class="modal"
+    id="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-handle"></div>
+
+        <div
+            class="modal-title"
+            id="modalTitle">
+            Create
+        </div>
+
+        <div id="modalBody"></div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast"></div>
+
+
+<script>
+
+'use strict';
+
+/* ============================================================
+   TESTMONY V0.0.1
+   Frontend Core
+   ============================================================ */
+
+const API = window.location.origin;
+
+let CURRENT_USER = null;
+let TOKEN = localStorage.getItem('testmony_token') || null;
+
+let AUTH_MODE = 'login';
+
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+
+function $(selector) {
+    return document.querySelector(selector);
+}
+
+function $all(selector) {
+    return document.querySelectorAll(selector);
+}
+
+
+function toast(message) {
+
+    const el = $('#toast');
+
+    el.textContent = message;
+    el.classList.add('show');
+
+    setTimeout(() => {
+        el.classList.remove('show');
+    }, 2500);
+}
+
+
+/* ============================================================
+   SPLASH
+   ============================================================ */
+
+window.addEventListener('load', () => {
+
+    setTimeout(() => {
+
+        $('#splash').classList.add('hidden');
+
+        setTimeout(() => {
+
+            if (TOKEN) {
+
+                $('#app').classList.add('visible');
+
+            } else {
+
+                $('#authScreen').classList.add('active');
+
+            }
+
+        }, 700);
+
+    }, 6000);
+
+});
+
+
+/* ============================================================
+   AUTH SWITCH
+   ============================================================ */
+
+$('#authSwitchBtn').addEventListener('click', () => {
+
+    if (AUTH_MODE === 'login') {
+
+        AUTH_MODE = 'register';
+
+        $('#loginForm').style.display = 'none';
+        $('#registerForm').style.display = 'block';
+
+        $('#authTitle').textContent = 'Create your account';
+        $('#authSubtitle').textContent =
+            'Join Testmony — Connect beyond';
+
+        $('#authSwitchText').textContent =
+            'Already have an account?';
+
+        $('#authSwitchBtn').textContent =
+            'Login';
+
+    } else {
+
+        AUTH_MODE = 'login';
+
+        $('#loginForm').style.display = 'block';
+        $('#registerForm').style.display = 'none';
+
+        $('#authTitle').textContent =
+            'Welcome to Testmony';
+
+        $('#authSubtitle').textContent =
+            'Connect beyond';
+
+        $('#authSwitchText').textContent =
+            "Don't have an account?";
+
+        $('#authSwitchBtn').textContent =
+            'Create Account';
+
+    }
+
+});
+
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+$('#loginForm').addEventListener('submit', async (event) => {
+
+    event.preventDefault();
+
+    const identifier =
+        $('#loginIdentifier').value.trim();
+
+    const password =
+        $('#loginPassword').value;
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/auth/login`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    identifier,
+                    email: identifier,
+                    username: identifier,
+                    password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            toast(
+                data.message ||
+                data.error ||
+                'Login failed'
+            );
+
+            return;
+        }
+
+        TOKEN =
+            data.access_token ||
+            data.token ||
+            data.accessToken;
+
+        if (TOKEN) {
+
+            localStorage.setItem(
+                'testmony_token',
+                TOKEN
+            );
+
+        }
+
+        CURRENT_USER =
+            data.user ||
+            data.data ||
+            null;
+
+        $('#authScreen').classList.remove('active');
+        $('#app').classList.add('visible');
+
+        toast('Welcome to Testmony');
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            'Unable to connect to Testmony server'
+        );
+
+    }
+
+});
+
+
+/* ============================================================
+   REGISTER
+   ============================================================ */
+
+$('#registerForm').addEventListener('submit', async (event) => {
+
+    event.preventDefault();
+
+    const name =
+        $('#registerName').value.trim();
+
+    const username =
+        $('#registerUsername').value.trim();
+
+    const email =
+        $('#registerEmail').value.trim();
+
+    const password =
+        $('#registerPassword').value;
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/auth/register`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    name,
+                    full_name: name,
+                    username,
+                    email,
+                    password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            toast(
+                data.message ||
+                data.error ||
+                'Registration failed'
+            );
+
+            return;
+        }
+
+        toast(
+            'Account created. Please login.'
+        );
+
+        AUTH_MODE = 'login';
+
+        $('#loginForm').style.display = 'block';
+        $('#registerForm').style.display = 'none';
+
+        $('#authTitle').textContent =
+            'Welcome to Testmony';
+
+        $('#authSubtitle').textContent =
+            'Connect beyond';
+
+        $('#authSwitchText').textContent =
+            "Don't have an account?";
+
+        $('#authSwitchBtn').textContent =
+            'Create Account';
+
+        $('#loginIdentifier').value = email;
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            'Unable to connect to Testmony server'
+        );
+
+    }
+
+});
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+function navigate(screenId, button) {
+
+    $all('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+
+    const screen = document.getElementById(screenId);
+
+    if (screen) {
+        screen.classList.add('active');
+    }
+
+    $all('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    if (button) {
+        button.classList.add('active');
+    }
+
+    window.scrollTo(0,0);
+}
+
+
+function showScreen(screenId) {
+
+    $all('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+
+    const target =
+        document.getElementById(screenId);
+
+    if (target) {
+        target.classList.add('active');
+    }
+
+}
+
+
+function closeSubPage() {
+
+    showScreen('discoveryScreen');
+
+}
+
+
+/* ============================================================
+   FEED TABS
+   ============================================================ */
+
+function switchFeedTab(button) {
+
+    $all('.feed-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+}
+
+
+/* ============================================================
+   CREATE POST
+   ============================================================ */
+
+function openCreatePost() {
+
+    $('#modalTitle').textContent =
+        'Create Post';
+
+    $('#modalBody').innerHTML = `
+
+        <textarea
+            id="postCaption"
+            class="input"
+            rows="5"
+            placeholder="What's on your mind?"></textarea>
+
+        <div style="height:12px;"></div>
+
+        <button
+            class="primary-btn"
+            onclick="publishPost()">
+            Publish Post
+        </button>
+
+    `;
+
+    $('#modal').classList.add('active');
+
+}
+
+
+function publishPost() {
+
+    const caption =
+        $('#postCaption').value.trim();
+
+    if (!caption) {
+
+        toast('Write something first');
+
+        return;
+    }
+
+    $('#modal').classList.remove('active');
+
+    toast('Post published');
+
+}
+
+
+/* ============================================================
+   STORY
+   ============================================================ */
+
+function createStory() {
+
+    $('#modalTitle').textContent =
+        'Create Story';
+
+    $('#modalBody').innerHTML = `
+
+        <textarea
+            id="storyText"
+            class="input"
+            rows="4"
+            placeholder="Write your story..."></textarea>
+
+        <div style="height:12px;"></div>
+
+        <button
+            class="primary-btn"
+            onclick="publishStory()">
+            Post Story
+        </button>
+
+    `;
+
+    $('#modal').classList.add('active');
+
+}
+
+
+function publishStory() {
+
+    const text =
+        $('#storyText').value.trim();
+
+    if (!text) {
+
+        toast('Write a story first');
+
+        return;
+    }
+
+    $('#modal').classList.remove('active');
+
+    toast('Story posted — expires in 24 hours');
+
+}
+
+
+/* ============================================================
+   LIKE
+   ============================================================ */
+
+function toggleLike(button) {
+
+    if (button.textContent.includes('♡')) {
+
+        button.textContent = '♥ Liked';
+
+    } else {
+
+        button.textContent = '♡ Like';
+
+    }
+
+}
+
+
+/* ============================================================
+   COMMENTS
+   ============================================================ */
+
+function openComments() {
+
+    $('#modalTitle').textContent =
+        'Comments';
+
+    $('#modalBody').innerHTML = `
+
+        <div
+            style="
+                padding:15px;
+                border-radius:15px;
+                background:rgba(255,255,255,.05);
+                color:#a9b8d1;
+                margin-bottom:12px;
+            ">
+            No comments yet.
+        </div>
+
+        <input
+            class="input"
+            placeholder="Write a comment...">
+
+    `;
+
+    $('#modal').classList.add('active');
+
+}
+
+
+/* ============================================================
+   DISCOVERY
+   ============================================================ */
+
+function openDiscovery(type) {
+
+    const titleMap = {
+
+        ai: 'AI Council',
+        studio: 'Creative Studio',
+        market: 'Market',
+        map: 'World Map',
+        channels: 'Channels',
+        communities: 'Communities',
+        videos: 'Videos',
+        settings: 'Settings'
+
+    };
+
+    $('#subPageTitle').textContent =
+        titleMap[type] || 'Discovery';
+
+
+    const content = $('#subPageContent');
+
+
+    /* AI COUNCIL */
+
+    if (type === 'ai') {
+
+        content.innerHTML = `
+
+            ${option(
+                '📖',
+                'Education AI',
+                'Study notes, syllabus, books and past papers',
+                "openAI('education')"
+            )}
+
+            ${option(
+                '❤️',
+                'Health AI',
+                'General health information',
+                "openAI('health')"
+            )}
+
+            ${option(
+                '🌿',
+                'Agriculture AI',
+                'Crops, farming and agriculture',
+                "openAI('agriculture')"
+            )}
+
+            ${option(
+                '🔍',
+                'Research AI',
+                'Research methodology and citations',
+                "openAI('research')"
+            )}
+
+            ${option(
+                '📐',
+                'AI Canvas',
+                'AI workspace for documents',
+                "openAI('canvas')"
+            )}
+
+        `;
+
+    }
+
+
+    /* CREATIVE STUDIO */
+
+    else if (type === 'studio') {
+
+        content.innerHTML = `
+
+            ${option(
+                '🖼️',
+                'Image Creator',
+                'Posters, covers and social graphics',
+                "toast('Image Creator coming in Phase 7')"
+            )}
+
+            ${option(
+                '🎥',
+                'Video Creator',
+                'Create short videos',
+                "toast('Video Creator coming in Phase 7')"
+            )}
+
+            ${option(
+                '📄',
+                'Document Creator',
+                'Create digital documents',
+                "toast('Document Creator coming in Phase 7')"
+            )}
+
+            ${option(
+                '✨',
+                'Design Assistant',
+                'AI-assisted creative ideas',
+                "toast('Design Assistant coming in Phase 7')"
+            )}
+
+        `;
+
+    }
+
+
+    /* MARKET */
+
+    else if (type === 'market') {
+
+        content.innerHTML = `
+
+            ${option(
+                '🛍️',
+                'Products',
+                'Browse physical products',
+                "toast('Products coming in Phase 8')"
+            )}
+
+            ${option(
+                '🧰',
+                'Services',
+                'Find services',
+                "toast('Services coming in Phase 8')"
+            )}
+
+            ${option(
+                '📦',
+                'Digital',
+                'Digital products',
+                "toast('Digital Market coming in Phase 8')"
+            )}
+
+            ${option(
+                '➕',
+                'Upload Product',
+                'Sell something on Testmony',
+                "toast('Seller tools coming in Phase 8')"
+            )}
+
+        `;
+
+    }
+
+
+    /* WORLD MAP */
+
+    else if (type === 'map') {
+
+        content.innerHTML = `
+
+            <div
+                style="
+                    height:350px;
+                    border-radius:22px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    text-align:center;
+                    background:
+                    radial-gradient(circle,
+                    rgba(47,128,255,.35),
+                    transparent 45%),
+                    #0c2854;
+                    border:1px solid var(--border);
+                ">
+
+                <div>
+
+                    <div style="font-size:65px;">
+                        🌍
+                    </div>
+
+                    <div style="
+                        margin-top:12px;
+                        font-size:18px;
+                        font-weight:800;
+                    ">
+                        World Map
+                    </div>
+
+                    <div style="
+                        margin-top:6px;
+                        color:#91a5c5;
+                        font-size:12px;
+                    ">
+                        Explore Testmony around the world
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* CHANNELS */
+
+    else if (type === 'channels') {
+
+        content.innerHTML = `
+
+            ${option(
+                '🔴',
+                'BBC News',
+                'Global news from UK',
+                "toast('BBC channel opened')"
+            )}
+
+            ${option(
+                '🔴',
+                'CNN',
+                'Global news',
+                "toast('CNN channel opened')"
+            )}
+
+            ${option(
+                '🟠',
+                'Al Jazeera',
+                'International news',
+                "toast('Al Jazeera channel opened')"
+            )}
+
+            ${option(
+                '🔵',
+                'ITV News',
+                'UK broadcaster',
+                "toast('ITV channel opened')"
+            )}
+
+            ${option(
+                '🔵',
+                'Testmony Channel',
+                'Our official channel',
+                "toast('Testmony Channel opened')"
+            )}
+
+        `;
+
+    }
+
+
+    /* COMMUNITIES */
+
+    else if (type === 'communities') {
+
+        content.innerHTML = `
+
+            ${option('📚','Education','Study communities',"toast('Education communities')")}
+            ${option('💻','Technology','Tech discussions',"toast('Technology communities')")}
+            ${option('💼','Business','Entrepreneurship',"toast('Business communities')")}
+            ${option('🌿','Agriculture','Farmers and agriculture',"toast('Agriculture communities')")}
+            ${option('⚽','Sports','Football and athletics',"toast('Sports communities')")}
+            ${option('🙏','Religion','Faith-based communities',"toast('Religion communities')")}
+            ${option('🗣️','Language','English and Swahili',"toast('Language communities')")}
+
+        `;
+
+    }
+
+
+    /* VIDEOS */
+
+    else if (type === 'videos') {
+
+        showScreen('videoScreen');
+
+        return;
+
+    }
+
+
+    /* SETTINGS */
+
+    else if (type === 'settings') {
+
+        content.innerHTML = `
+
+            ${option(
+                '📖',
+                'User Manual',
+                'Learn how to use Testmony',
+                'openManual()'
+            )}
+
+            ${option(
+                '🌓',
+                'Theme',
+                'Light / Dark mode',
+                'toggleTheme()'
+            )}
+
+            ${option(
+                'ℹ️',
+                'Version',
+                'Testmony V0.0.1',
+                "toast('Testmony V0.0.1')"
+            )}
+
+            ${option(
+                '🚪',
+                'Logout',
+                'Sign out of Testmony',
+                'logout()'
+            )}
+
+        `;
+
+    }
+
+
+    showScreen('subScreen');
+
+}
+
+
+function option(icon, title, description, action) {
+
+    return `
+
+        <button
+            class="option-card"
+            onclick="${action}">
+
+            <div class="option-icon">
+                ${icon}
+            </div>
+
+            <div class="option-text">
+
+                <div class="option-title">
+                    ${title}
+                </div>
+
+                <div class="option-description">
+                    ${description}
+                </div>
+
+            </div>
+
+            <div>
+                ›
+            </div>
+
+        </button>
+
+    `;
+
+}
+
+
+/* ============================================================
+   AI NAVIGATION
+   ============================================================ */
+
+function openAI(type) {
+
+    if (type === 'education') {
+
+        $('#subPageTitle').textContent =
+            'Education AI';
+
+        $('#subPageContent').innerHTML = `
+
+            ${option(
+                '🇹🇿',
+                'Tanzania',
+                'Education curriculum',
+                "educationLevel('Tanzania')"
+            )}
+
+            ${option(
+                '🇰🇪',
+                'Kenya',
+                'Education curriculum',
+                "educationLevel('Kenya')"
+            )}
+
+            ${option(
+                '🇺🇬',
+                'Uganda',
+                'Education curriculum',
+                "educationLevel('Uganda')"
+            )}
+
+            ${option(
+                '🇷🇼',
+                'Rwanda',
+                'Education curriculum',
+                "educationLevel('Rwanda')"
+            )}
+
+            ${option(
+                '🌍',
+                'Other Countries',
+                'Explore more curricula',
+                "toast('More countries coming soon')"
+            )}
+
+        `;
+
+    } else {
+
+        $('#subPageTitle').textContent =
+            type.charAt(0).toUpperCase() +
+            type.slice(1) +
+            ' AI';
+
+        $('#subPageContent').innerHTML = `
+
+            <div
+                style="
+                    padding:25px;
+                    text-align:center;
+                    border-radius:20px;
+                    background:var(--card);
+                    border:1px solid var(--border);
+                ">
+
+                <div style="font-size:48px;">
+                    🤖
+                </div>
+
+                <div style="
+                    margin-top:12px;
+                    font-size:18px;
+                    font-weight:800;
+                ">
+                    ${type.toUpperCase()} AI
+                </div>
+
+                <p style="
+                    margin-top:8px;
+                    color:var(--muted);
+                    font-size:13px;
+                ">
+                    AI assistant interface.
+                    Real AI API integration will be connected
+                    in the next phase.
+                </p>
+
+                <button
+                    class="primary-btn"
+                    style="margin-top:18px;"
+                    onclick="openAIChat('${type}')">
+                    Open AI Chat
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+function educationLevel(country) {
+
+    $('#subPageTitle').textContent =
+        country + ' — Choose Level';
+
+    $('#subPageContent').innerHTML = `
+
+        ${option('🌱','Nursery / Early Childhood','Early education',"educationContent('${country}','Nursery')")}
+
+        ${option('📚','Primary','Primary education',"educationContent('${country}','Primary')")}
+
+        ${option('🏫','Secondary','Secondary education',"educationContent('${country}','Secondary')")}
+
+        ${option('🎓','Certificate','Certificate level',"educationContent('${country}','Certificate')")}
+
+        ${option('🎓','Diploma','Diploma level',"educationContent('${country}','Diploma')")}
+
+        ${option('🎓','Degree','University degree',"educationContent('${country}','Degree')")}
+
+        ${option('🎓','Master','Master degree',"educationContent('${country}','Master')")}
+
+        ${option('🎓','PhD','Doctoral research',"educationContent('${country}','PhD')")}
+
+    `;
+
+}
+
+
+function educationContent(country, level) {
+
+    $('#subPageTitle').textContent =
+        `${level} — ${country}`;
+
+    $('#subPageContent').innerHTML = `
+
+        ${option(
+            '📝',
+            'Notes',
+            'Study notes and explanations',
+            "openAIChat('education')"
+        )}
+
+        ${option(
+            '📚',
+            'Books',
+            'Educational books',
+            "toast('Books section')"
+        )}
+
+        ${option(
+            '📄',
+            'Past Papers',
+            'Past examination papers',
+            "toast('Past Papers section')"
+        )}
+
+        ${option(
+            '✅',
+            'Marking Schemes',
+            'Answer and marking guides',
+            "toast('Marking Schemes section')"
+        )}
+
+    `;
+
+}
+
+
+function openAIChat(type) {
+
+    $('#subPageTitle').textContent =
+        'AI Chat';
+
+    $('#subPageContent').innerHTML = `
+
+        <div class="ai-chat">
+
+            <div class="ai-messages">
+
+                <div class="ai-message bot">
+
+                    Hello! I'm your ${type}
+                    assistant for Testmony.
+
+                    Ask me anything about your topic.
+
+                </div>
+
+            </div>
+
+            <div class="ai-input">
+
+                <input
+                    id="aiQuestion"
+                    placeholder="Ask your question...">
+
+                <button
+                    class="send-btn"
+                    onclick="sendAIQuestion()">
+                    ➤
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function sendAIQuestion() {
+
+    const input =
+        $('#aiQuestion');
+
+    if (!input || !input.value.trim()) {
+        return;
+    }
+
+    toast(
+        'AI integration will be connected in the next phase'
+    );
+
+    input.value = '';
+
+}
+
+
+/* ============================================================
+   CHAT
+   ============================================================ */
+
+function openChat(name) {
+
+    showScreen('conversationScreen');
+
+    const header =
+        $('#conversationScreen .sub-header .sub-title');
+
+    if (header) {
+        header.textContent = name;
+    }
+
+}
+
+
+function sendChatMessage() {
+
+    const input =
+        $('#chatInput');
+
+    const text =
+        input.value.trim();
+
+    if (!text) return;
+
+    const messages =
+        $('#chatMessages');
+
+    const bubble =
+        document.createElement('div');
+
+    bubble.className =
+        'ai-message user';
+
+    bubble.textContent =
+        text;
+
+    messages.appendChild(bubble);
+
+    input.value = '';
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+/* ============================================================
+   USER MANUAL
+   ============================================================ */
+
+function openManual() {
+
+    $('#modalTitle').textContent =
+        'Testmony User Manual';
+
+    $('#modalBody').innerHTML = `
+
+        <div style="
+            line-height:1.7;
+            color:#d8e3f5;
+            font-size:13px;
+        ">
+
+            <div style="
+                text-align:center;
+                padding:10px 0 25px;
+            ">
+
+                <div style="
+                    width:75px;
+                    height:75px;
+                    margin:auto;
+                    border-radius:22px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:linear-gradient(135deg,#2f80ff,#625df5);
+                    font-size:40px;
+                    font-weight:900;
+                ">
+                    T
+                </div>
+
+                <h2 style="margin-top:15px;">
+                    Testmony
+                </h2>
+
+                <div style="color:#8da2c2;">
+                    Connect beyond — Testmony V0.0.1
+                </div>
+
+            </div>
+
+            <h3>About Testmony</h3>
+
+            <p>
+                Testmony is a social network, messaging,
+                AI, education, marketplace and creator platform.
+            </p>
+
+            <br>
+
+            <h3>Founder</h3>
+
+            <p>
+                MSAFIRI WILLIAM MUNGA
+            </p>
+
+            <br>
+
+            <h3>Company</h3>
+
+            <p>
+                ZetroLink Technology Limited
+            </p>
+
+            <br>
+
+            <h3>Main Sections</h3>
+
+            <p>
+                Home — Feed, Stories and Posts<br>
+                Discovery — AI, Studio, Market and Communities<br>
+                Chats — Messaging and calls<br>
+                Profile — Personal profile
+            </p>
+
+            <br>
+
+            <h3>Connect beyond</h3>
+
+            <p>
+                Testmony is designed to connect people,
+                ideas, education, creativity and opportunities.
+            </p>
+
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="downloadManual()">
+            📥 Download User Manual
+        </button>
+
+    `;
+
+    $('#modal').classList.add('active');
+
+}
+
+
+function downloadManual() {
+
+    const text = `
+
+TESTMONY USER MANUAL
+====================
+
+Testmony V0.0.1
+Connect beyond
+
+Founder:
+MSAFIRI WILLIAM MUNGA
+
+Company:
+ZetroLink Technology Limited
+
+ABOUT TESTMONY
+--------------
+
+Testmony is a social network, messaging,
+AI, education, marketplace and creator platform.
+
+MAIN SECTIONS
+-------------
+
+1. Home
+2. Discovery
+3. Chats
+4. Profile
+
+DISCOVERY
+---------
+
+AI Council
+Creative Studio
+Market
+World Map
+Channels
+Communities
+Videos
+Settings
+
+AI COUNCIL
+----------
+
+Education AI
+Health AI
+Agriculture AI
+Research AI
+AI Canvas
+
+EDUCATION AI
+------------
+
+Country
+Level
+Content
+AI Chat
+
+STORIES
+-------
+
+Text status
+Photo status
+Video status
+Audio status
+
+Stories expire after 24 hours.
+
+MESSAGING
+---------
+
+Text
+Voice
+Photo
+Video
+Documents
+Voice calls
+Video calls
+
+CONNECT BEYOND
+--------------
+
+Testmony — connecting people,
+ideas and opportunities beyond boundaries.
+
+    `.trim();
+
+    const blob =
+        new Blob([text], {
+            type: 'text/plain;charset=utf-8'
+        });
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement('a');
+
+    a.href = url;
+
+    a.download =
+        'Testmony-UserManual.txt';
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(url);
+
+    toast('User Manual downloaded');
+
+}
+
+
+/* ============================================================
+   NOTIFICATIONS
+   ============================================================ */
+
+function openNotifications() {
+
+    $('#modalTitle').textContent =
+        'Notifications';
+
+    $('#modalBody').innerHTML = `
+
+        ${notification(
+            '👤',
+            'New follower',
+            'Someone started following you'
+        )}
+
+        ${notification(
+            '❤️',
+            'New like',
+            'Someone liked your post'
+        )}
+
+        ${notification(
+            '💬',
+            'New comment',
+            'Someone commented on your post'
+        )}
+
+        ${notification(
+            '📞',
+            'Calls',
+            'Your call notifications appear here'
+        )}
+
+    `;
+
+    $('#modal').classList.add('active');
+
+}
+
+
+function notification(icon,title,text) {
+
+    return `
+
+        <div style="
+            display:flex;
+            gap:12px;
+            padding:14px 0;
+            border-bottom:1px solid var(--border);
+        ">
+
+            <div style="
+                width:42px;
+                height:42px;
+                border-radius:13px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:rgba(47,128,255,.12);
+            ">
+                ${icon}
+            </div>
+
+            <div>
+                <div style="font-weight:750;">
+                    ${title}
+                </div>
+
+                <div style="
+                    margin-top:3px;
+                    color:var(--muted);
+                    font-size:11px;
+                ">
+                    ${text}
+                </div>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+function searchPeople() {
+
+    toast(
+        'Search users from the Home search bar'
+    );
+
+}
+
+
+/* ============================================================
+   THEME
+   ============================================================ */
+
+function toggleTheme() {
+
+    const light =
+        document.body.classList.toggle('light-theme');
+
+    if (light) {
+
+        document.documentElement.style.setProperty(
+            '--bg',
+            '#f3f7ff'
+        );
+
+        document.documentElement.style.setProperty(
+            '--text',
+            '#10203d'
+        );
+
+        document.documentElement.style.setProperty(
+            '--card',
+            '#ffffff'
+        );
+
+        document.documentElement.style.setProperty(
+            '--muted',
+            '#66738a'
+        );
+
+        toast('Light mode');
+
+    } else {
+
+        document.documentElement.style.setProperty(
+            '--bg',
+            '#07152f'
+        );
+
+        document.documentElement.style.setProperty(
+            '--text',
+            '#ffffff'
+        );
+
+        document.documentElement.style.setProperty(
+            '--card',
+            'rgba(18,40,80,.88)'
+        );
+
+        document.documentElement.style.setProperty(
+            '--muted',
+            '#9eb0cf'
+        );
+
+        toast('Dark mode');
+
+    }
+
+}
+
+
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
+function logout() {
+
+    localStorage.removeItem(
+        'testmony_token'
+    );
+
+    TOKEN = null;
+    CURRENT_USER = null;
+
+    $('#app').classList.remove('visible');
+
+    $('#authScreen').classList.add('active');
+
+    toast('Logged out');
+
+}
+
+
+/* ============================================================
+   MODAL CLOSE
+   ============================================================ */
+
+$('#modal').addEventListener('click', (event) => {
+
+    if (event.target === $('#modal')) {
+
+        $('#modal').classList.remove('active');
+
+    }
+
+});
+
+
+/* ============================================================
+   GLOBAL SEARCH
+   ============================================================ */
+
+$('#globalSearch').addEventListener(
+    'keydown',
+    event => {
+
+        if (event.key === 'Enter') {
+
+            const query =
+                event.target.value.trim();
+
+            if (!query) return;
+
+            toast(
+                `Searching for "${query}"`
+            );
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   INITIAL STATE
+   ============================================================ */
+
+console.log(
+    'TESTMONY V0.0.1 — Connect beyond'
+);
+
+console.log(
+    'Founder: MSAFIRI WILLIAM MUNGA'
+);
+
+console.log(
+    'Company: ZetroLink Technology Limited'
+);
+
+</script>
+
+</body>
+</html>
